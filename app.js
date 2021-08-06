@@ -1,3 +1,33 @@
+// Pet classes
+
+class Pet {
+    constructor(name, age, vaccinated = false, castrated = false, dewormed = false) {
+        this.name = name;
+        this.age = age;
+        this.vaccinated = vaccinated;
+        this.castrated = castrated;
+        this.dewormed = dewormed;
+    }
+
+}
+
+
+class Dog extends Pet {
+
+}
+
+class Cat extends Pet {
+
+}
+
+
+
+
+
+
+
+
+
 const img = document.querySelector('#logoImg');
 // console.log(img);
 
