@@ -21,6 +21,7 @@ class Cat extends Pet {
 }
 
 
+
 // Logo sizing
 const img = document.querySelector('#logoImg');
 
