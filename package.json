@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/eulerbakke/eulerbakke.github.io/issues"
   },
-  "homepage": "https://github.com/eulerbakke/eulerbakke.github.io#readme"
+  "homepage": "https://github.com/eulerbakke/eulerbakke.github.io#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.0.5",
+    "morgan": "^1.10.0"
+  }
 }

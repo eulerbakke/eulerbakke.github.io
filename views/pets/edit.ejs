@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar pet</title>
+</head>
+
+<body>
+    <h1>Editar pet</h1>
+    <form action="/pets/<%= pet.id %>?_method=PUT" method="POST">
+        <div>
+            <label for="name">Nome do Pet</label>
+            <input type="text" name="pet[name]" id="name" value="<%= pet.name %>">
+        </div>
+        <div>
+            <label for="location">Localização do Pet</label>
+            <input type="text" name="pet[location]" id="location" value="<%= pet.location %>">
+        </div>
+        <button>Atualizar pet</button>
+    </form>
+    <a href="/pets/<%= pet._id %>">Voltar para o pet</a>
+
+</body>
+
+</html>
