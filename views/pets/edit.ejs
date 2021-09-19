@@ -1,28 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar pet</title>
-</head>
-
-<body>
-    <h1>Editar pet</h1>
-    <form action="/pets/<%= pet.id %>?_method=PUT" method="POST">
-        <div>
-            <label for="name">Nome do Pet</label>
-            <input type="text" name="pet[name]" id="name" value="<%= pet.name %>">
+<% layout('layouts/boilerplate') %>
+    <div class="row">
+        <h1 class="text-center">Editar pet</h1>
+        <div class="col-6 offset-3">
+            <form action="/pets" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="name">Nome do Pet</label>
+                    <input class="form-control" type="text" name="pet[name]" id="name" value="<%= pet.name %>">
+                </div>
+                <!-- <div class="mb-3">
+                    <label class="form-label" for="location">Localização do Pet</label>
+                    <input class="form-control" type="text" name="pet[location]" id="location">
+                </div> -->
+                <div class="mb-3">
+                    <label class="form-label" for="location">Localização do Pet</label>
+                    <select class="form-select" id="location" aria-label="Default select example" name="pet[location]">
+                        <option selected>Recife</option>
+                    </select>
+                </div>
+                <label class="form-label" for="location">Marque as opções abaixo:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="castratedCheck" name="pet[castrated]"
+                        <%=pet.castrated? "checked" : "" %>>
+                    <label class="form-check-label" for="castratedCheck">
+                        Castrado?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="vaccinatedCheck"
+                        name="pet[vaccinated]" <%=pet.vaccinated? "checked" : "" %>>
+                    <label class="form-check-label" for="vaccinatedCheck">
+                        Vacinado?
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="dewormedCheck" name="pet[dewormed]"
+                        <%=pet.dewormed? "checked" : "" %>>
+                    <label class="form-check-label" for="dewormedCheck">
+                        Vermifugado?
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="readyCheck"
+                        name="pet[readyForAdoption]" <%=pet.readyForAdoption? "checked" : "" %>>
+                    <label class="form-check-label" for="readyCheck">
+                        Pronto para adoção?
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Descrição</label>
+                    <textarea class="form-control" type="text" name="pet[description]"
+                        id="description"><%= pet.description %></textarea>
+                </div>
+                <div class="mb-3 mt-3">
+                    <button class="btn btn-info">Atualizar pet</button>
+                </div>
+            </form>
+            <a href="/pets/<%= pet._id %>">Voltar para o pet</a>
         </div>
-        <div>
-            <label for="location">Localização do Pet</label>
-            <input type="text" name="pet[location]" id="location" value="<%= pet.location %>">
-        </div>
-        <button>Atualizar pet</button>
-    </form>
-    <a href="/pets/<%= pet._id %>">Voltar para o pet</a>
-
-</body>
-
-</html>
+    </div>
