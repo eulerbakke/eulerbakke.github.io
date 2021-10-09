@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const { petSchema } = require('../schemas');
 const Schema = mongoose.Schema;
+const Review = require('./review')
 
 const PetSchema = new Schema({
     name: String,
@@ -26,7 +28,23 @@ const PetSchema = new Schema({
         required: true,
         default: false
     },
-    location: String
+    location: String,
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 });
+
+PetSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
 
 module.exports = mongoose.model('Pet', PetSchema);

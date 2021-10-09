@@ -2,9 +2,18 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const session = require('express-session');
+const flash = require('connect-flash');
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const Pet = require('./models/pet');
 const morgan = require('morgan');
+const { error } = require('console');
+const { errorMonitor } = require('events');
+const Review = require('./models/review');
+
+const pets = require('./routes/pets');
+const reviews = require('./routes/reviews');
 
 mongoose.connect('mongodb://localhost:27017/pet', {
     useNewUrlParser: true,
@@ -17,9 +26,7 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
-
 const app = express();
-
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -27,54 +34,43 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('tiny'));
+
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
+
+app.use('/pets', pets);
+app.use('/pets/:id/reviews', reviews);
 
 app.get('/', (req, res) => {
     res.render('home');
 })
 
-app.get('/pets', async (req, res) => {
-    const pets = await Pet.find({});
-    res.render('pets/index', { pets })
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Página não encontrada.', 404));
 })
 
-app.get('/pets/new', (req, res) => {
-    res.render('pets/new');
-})
-
-app.post('/pets', async (req, res) => {
-    const pet = new Pet(req.body.pet);
-    console.log(req.body)
-    console.log(pet)
-    pet.photos = 'https://source.unsplash.com/collection/70293663';
-    await pet.save();
-    res.redirect(`/pets/${pet._id}`);
-})
-
-app.get('/pets/:id', async (req, res) => {
-    const pet = await Pet.findById(req.params.id);
-    res.render('pets/show', { pet });
-})
-
-app.get('/pets/:id/edit', async (req, res) => {
-    const pet = await Pet.findById(req.params.id);
-    res.render('pets/edit', { pet });
-})
-
-app.put('/pets/:id', async (req, res) => {
-    const { id } = req.params;
-    const pet = await Pet.findByIdAndUpdate(id, { ...req.body.pet });
-    res.redirect(`/pets/${pet._id}`);
-})
-
-app.delete('/pets/:id', async (req, res) => {
-    const { id } = req.params;
-    await Pet.findByIdAndDelete(id);
-    res.redirect('/pets');
-})
-
-app.use((req, res) => {
-    res.status(404).send('Página não encontrada');
+app.use((err, req, res, next) => {
+    const { statusCode = 500, message = 'Algo deu errado' } = err;
+    if (!err.message) err.message = 'Algo deu errado.';
+    res.status(statusCode).render('error', { err });
 })
 
 app.listen(3000, () => {

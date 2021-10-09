@@ -2,10 +2,13 @@
     <div class="row">
         <h1 class="text-center">Novo pet</h1>
         <div class="col-6 offset-3">
-            <form action="/pets" method="POST">
+            <form action="/pets" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="name">Nome do Pet</label>
-                    <input class="form-control" type="text" name="pet[name]" id="name">
+                    <input class="form-control" type="text" name="pet[name]" id="name" required>
+                    <div class="invalid-feedback">
+                        Digite um nome.
+                    </div>
                 </div>
                 <!-- <div class="mb-3">
                     <label class="form-label" for="location">Localização do Pet</label>
@@ -13,33 +16,38 @@
                 </div> -->
                 <div class="mb-3">
                     <label class="form-label" for="location">Localização do Pet</label>
-                    <select class="form-select" id="location" aria-label="Default select example" name="pet[location]">
+                    <select class="form-select" id="location" aria-label="Default select example" name="pet[location]"
+                        required>
                         <option selected>Recife</option>
                     </select>
+                    <div class="invalid-feedback">
+                        Escolha um local.
+                    </div>
                 </div>
                 <label class="form-label" for="location">Marque as opções abaixo:</label>
                 <div class="form-check">
-                    <!-- <input class="form-check-input" type="hidden" value="0" name="pet[castrated]"> -->
-                    <input class="form-check-input" type="checkbox" value="1" id="castratedCheck" name="pet[castrated]">
+                    <input class="form-check-input" type="checkbox" value="true" id="castratedCheck"
+                        name="pet[castrated]">
                     <label class="form-check-label" for="castratedCheck">
                         Castrado?
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="1" id="vaccinatedCheck"
+                    <input class="form-check-input" type="checkbox" value="true" id="vaccinatedCheck"
                         name="pet[vaccinated]">
                     <label class="form-check-label" for="vaccinatedCheck">
                         Vacinado?
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="1" id="dewormedCheck" name="pet[dewormed]">
+                    <input class="form-check-input" type="checkbox" value="true" id="dewormedCheck"
+                        name="pet[dewormed]">
                     <label class="form-check-label" for="dewormedCheck">
                         Vermifugado?
                     </label>
                 </div>
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" value="1" id="readyCheck"
+                    <input class="form-check-input" type="checkbox" value="true" id="readyCheck"
                         name="pet[readyForAdoption]">
                     <label class="form-check-label" for="readyCheck">
                         Pronto para adoção?
@@ -47,7 +55,11 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="description">Descrição</label>
-                    <textarea class="form-control" type="text" name="pet[description]" id="description"></textarea>
+                    <textarea class="form-control" type="text" name="pet[description]" id="description"
+                        required></textarea>
+                    <div class="invalid-feedback">
+                        Digite uma descrição.
+                    </div>
                 </div>
                 <div class="mb-3 mt-3">
                     <button class="btn btn-success">Adicionar pet</button>
