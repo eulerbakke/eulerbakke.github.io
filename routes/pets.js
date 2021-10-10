@@ -5,6 +5,7 @@ const { petSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Pet = require('../models/pet');
 const Review = require('../models/review');
+const { isLoggedIn } = require('../middleware');
 
 
 const validatePet = (req, res, next) => {
@@ -23,11 +24,11 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('pets/index', { pets })
 }))
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('pets/new');
 })
 
-router.post('/', validatePet, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validatePet, catchAsync(async (req, res, next) => {
     // if (!req.body.pet) throw new ExpressError('Os dados do pet são inválidos.', 400);
     const pet = new Pet(req.body.pet);
     pet.photos = 'https://source.unsplash.com/collection/70293663';
@@ -45,7 +46,7 @@ router.get('/:id', catchAsync(async (req, res) => {
     res.render('pets/show', { pet });
 }))
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const pet = await Pet.findById(req.params.id);
     if (!pet) {
         req.flash('error', 'Pet não encontrado!');
@@ -54,14 +55,14 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
     res.render('pets/edit', { pet });
 }))
 
-router.put('/:id', validatePet, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validatePet, catchAsync(async (req, res) => {
     const { id } = req.params;
     const pet = await Pet.findByIdAndUpdate(id, { ...req.body.pet });
     req.flash('success', 'Pet atualizado com sucesso!');
     res.redirect(`/pets/${pet._id}`);
 }))
 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Pet.findByIdAndDelete(id);
     req.flash('success', 'Pet removido com sucesso!');
