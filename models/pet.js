@@ -3,11 +3,20 @@ const { petSchema } = require('../schemas');
 const Schema = mongoose.Schema;
 const Review = require('./review')
 
+const PhotoSchema = new Schema({
+    url: String,
+    filename: String
+});
+
+PhotoSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_300');
+});
+
 const PetSchema = new Schema({
     name: String,
     description: String,
     birthDate: Date,
-    photos: [String],
+    photos: [PhotoSchema],
     readyForAdoption: {
         type: Boolean,
         required: true,

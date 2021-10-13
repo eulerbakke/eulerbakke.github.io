@@ -10,7 +10,8 @@ module.exports.petSchema = Joi.object({
         readyForAdoption: Joi.boolean(),
         dewormed: Joi.boolean(),
         dateOfBirth: Joi.date()
-    }).required()
+    }).required(),
+    deletePhotos: Joi.array()
 });
 
 module.exports.reviewSchema = Joi.object({

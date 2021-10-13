@@ -2,7 +2,7 @@
     <div class="row">
         <h1 class="text-center">Novo pet</h1>
         <div class="col-6 offset-3">
-            <form action="/pets" method="POST" novalidate class="validated-form">
+            <form action="/pets" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="name">Nome do Pet</label>
                     <input class="form-control" type="text" name="pet[name]" id="name" required>
@@ -10,10 +10,6 @@
                         Digite um nome.
                     </div>
                 </div>
-                <!-- <div class="mb-3">
-                    <label class="form-label" for="location">Localização do Pet</label>
-                    <input class="form-control" type="text" name="pet[location]" id="location">
-                </div> -->
                 <div class="mb-3">
                     <label class="form-label" for="location">Localização do Pet</label>
                     <select class="form-select" id="location" aria-label="Default select example" name="pet[location]"
@@ -60,6 +56,10 @@
                     <div class="invalid-feedback">
                         Digite uma descrição.
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Adicionar fotos</label>
+                    <input class="form-control" type="file" id="image" multiple name="image">
                 </div>
                 <div class="mb-3 mt-3">
                     <button class="btn btn-success">Adicionar pet</button>

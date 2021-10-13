@@ -1,4 +1,5 @@
 const Pet = require('../models/pet');
+const { cloudinary } = require('../cloudinary');
 
 module.exports.index = async (req, res) => {
     const pets = await Pet.find({});
@@ -10,11 +11,12 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createPet = async (req, res, next) => {
-    // if (!req.body.pet) throw new ExpressError('Os dados do pet são inválidos.', 400);
     const pet = new Pet(req.body.pet);
+    pet.photos = req.files.map(f => ({ url: f.path, filename: f.filename }));
     pet.author = req.user._id;
-    pet.photos = 'https://source.unsplash.com/collection/70293663';
+    // pet.photos = 'https://source.unsplash.com/collection/70293663';
     await pet.save();
+    console.log(pet)
     req.flash('success', 'Pet cadastrado com sucesso!');
     res.redirect(`/pets/${pet._id}`);
 }
@@ -46,6 +48,15 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updatePet = async (req, res) => {
     const { id } = req.params;
     const pet = await Pet.findByIdAndUpdate(id, { ...req.body.pet });
+    const photos = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    pet.photos.push(...photos);
+    await pet.save();
+    if (req.body.deletePhotos) {
+        for (let filename of req.body.deletePhotos) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await pet.updateOne({ $pull: { photos: { filename: { $in: req.body.deletePhotos } } } });
+    }
     req.flash('success', 'Pet atualizado com sucesso!');
     res.redirect(`/pets/${pet._id}`);
 }
