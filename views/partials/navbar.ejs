@@ -9,7 +9,8 @@
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Início</a>
                 <a class="nav-link" href="/pets">Pets</a>
-                <% if(currentUser.username==='eulerbakke' || currentUser.username==='patriciaaquino' ) {%>
+                <% if(currentUser && (currentUser.username==='eulerbakke' || currentUser.username==='patriciaaquino' ))
+                    {%>
                     <a class="nav-link" href="/pets/new">Novo Pet</a>
                     <% } %>
             </div>
