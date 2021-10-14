@@ -9,7 +9,9 @@
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Início</a>
                 <a class="nav-link" href="/pets">Pets</a>
-                <a class="nav-link" href="/pets/new">Novo Pet</a>
+                <% if(currentUser.username==='eulerbakke' || currentUser.username==='patriciaaquino' ) {%>
+                    <a class="nav-link" href="/pets/new">Novo Pet</a>
+                    <% } %>
             </div>
             <div class="navbar-nav ms-auto">
                 <% if(!currentUser) {%>
