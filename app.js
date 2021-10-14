@@ -29,7 +29,7 @@ const reviewRoutes = require('./routes/reviews');
 
 const MongoStore = require('connect-mongo');
 
-const dbUrl = 'mongodb://localhost:27017/pet';
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/pet';
 
 //'mongodb://localhost:27017/pet'
 mongoose.connect(dbUrl, {
@@ -57,9 +57,11 @@ app.use(mongoSanitize({
     replaceWith: '_',
 }));
 
+const secret = process.env.SECRET || 'thisshouldbeabettersecret';
+
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    secret: 'thisshouldbeabettersecret',
+    secret,
     touchAfter: 24 * 60 * 60
 })
 
@@ -70,7 +72,7 @@ store.on("error", function (e) {
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'thisshouldbeabettersecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
